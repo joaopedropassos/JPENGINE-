@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JP Decision Engine — portfólio</title>
+  <meta name="description" content="Motor plugável de rota intramuros para WMS e frota AMR. Prova de laboratório v5–v7. Diagnóstico de 2 semanas.">
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    :root {
+      --bg: #F7F4EC;
+      --text: #141C2B;
+      --panel: #1B2A41;
+      --accent: #C8A024;
+      --card: #FFFFFF;
+      --muted: #5A6475;
+      --line: #E4DFD4;
+      --warn: #7A3B00;
+      --warn-bg: #FFF4E0;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+    a { color: var(--panel); }
+    a:hover { color: var(--accent); }
+    code, .mono {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.92em;
+      background: #EEEAE2;
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 1.25rem; }
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: 0.5rem;
+      z-index: 10;
+      padding: 0.65rem 0.9rem;
+      color: #141C2B;
+      background: #fff;
+      border-radius: 4px;
+      transform: translateY(-180%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .banner {
+      background: var(--panel);
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 0.65rem 0;
+      border-bottom: 3px solid var(--accent);
+    }
+    .banner strong { color: var(--accent); }
+    header.hero {
+      background: linear-gradient(135deg, var(--panel) 0%, #243552 100%);
+      color: #fff;
+      padding: 3.5rem 0 3rem;
+    }
+    .wordmark {
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin: 0 0 1rem;
+    }
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      line-height: 1.15;
+      margin: 0 0 0.75rem;
+      font-weight: 700;
+    }
+    .tagline {
+      font-size: 1.15rem;
+      max-width: 36rem;
+      margin: 0 0 1.25rem;
+      color: #E8E4DA;
+    }
+    .phrase {
+      font-size: 1.2rem;
+      font-weight: 600;
+      border-left: 4px solid var(--accent);
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      max-width: 40rem;
+    }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 650;
+      line-height: 1.3;
+      padding: 0.75rem 1.2rem;
+      border-radius: 6px;
+      border: 2px solid transparent;
+    }
+    .btn:focus-visible {
+      outline: 3px solid #F4D66D;
+      outline-offset: 3px;
+    }
+    .btn-primary { background: var(--accent); color: #141C2B; }
+    .btn-primary:hover { background: #D4B03A; color: #141C2B; }
+    .btn-ghost { border-color: #8A97AB; color: #fff; }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .meta { color: #A8B2C2; font-size: 0.9rem; margin-top: 1.25rem; }
+    section { padding: 2.75rem 0; }
+    section + section { border-top: 1px solid var(--line); }
+    h2 {
+      font-size: 1.45rem;
+      margin: 0 0 1rem;
+      font-weight: 700;
+    }
+    h3 { font-size: 1.05rem; margin: 0 0 0.5rem; }
+    .lead { color: var(--muted); margin-top: 0; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+      gap: 1rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+      gap: 1rem;
+    }
+    .card {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1.15rem 1.2rem;
+      box-shadow: 0 1px 2px rgba(20,28,43,0.04);
+    }
+    .card ul { margin: 0.5rem 0 0; padding-left: 1.1rem; }
+    .card li { margin: 0.25rem 0; }
+    .who { font-size: 0.9rem; color: var(--muted); margin: 0.75rem 0 0; overflow-wrap: anywhere; }
+    .seal {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: var(--accent);
+      color: #141C2B;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-right: 0.35rem;
+    }
+    .warn {
+      background: var(--warn-bg);
+      border: 1px solid #E8C98A;
+      border-left: 4px solid var(--accent);
+      color: var(--warn);
+      padding: 1rem 1.1rem;
+      border-radius: 8px;
+      margin: 1rem 0 1.25rem;
+    }
+    .warn strong { color: var(--text); }
+    .table-scroll {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .table-note {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin: 0.9rem 0 0.35rem;
+    }
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      background: var(--card);
+      font-size: 0.92rem;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 0.65rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: var(--panel); color: #fff; font-weight: 600; }
+    tr:nth-child(even) td { background: #FCFAF6; }
+    .chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 0.75rem; }
+    .chip h3 { color: var(--panel); }
+    .price { font-weight: 700; color: var(--panel); font-size: 1.05rem; }
+    .synthetic {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      border: 2px dashed #B8A67A;
+      background: #FFFbf0;
+      border-radius: 10px;
+      padding: 1.2rem 1.3rem;
+    }
+    .synthetic .label {
+      display: inline-block;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      font-size: 0.8rem;
+      color: #7A3B00;
+      margin-bottom: 0.5rem;
+    }
+    footer {
+      background: var(--panel);
+      color: #C5CCD8;
+      padding: 2rem 0;
+      font-size: 0.9rem;
+    }
+    footer a { color: var(--accent); }
+    footer .note { margin-top: 0.75rem; color: #8A97AB; }
+    ol.compact { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+    ol.compact li { margin: 0.3rem 0; }
+    @media (max-width: 520px) {
+      .wrap { padding-left: 1rem; padding-right: 1rem; }
+      header.hero { padding: 2.25rem 0 2rem; }
+      section { padding: 2rem 0; }
+      .cta-row { flex-direction: column; align-items: stretch; }
+      .cta-row .btn {
+        width: 100%;
+        min-height: 48px;
+        padding: 0.85rem 1rem !important;
+      }
+      .phrase { padding-left: 0.75rem; }
+      .synthetic { padding: 1rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+    @media print {
+      .banner { border-bottom: 2px solid #000; }
+      .btn { border: 1px solid #000; }
+      section { break-inside: avoid; }
+      #prova { break-before: page; }
+    }
+  </style>
+</head>
+<body>
+  <!-- canônico site: 04_site_jpde/index.html · sync 02_portfolio -->
+  <a class="skip-link" href="#problema">Pular para o conteúdo</a>
+  <div class="banner">
+    <div class="wrap"><strong>Laboratório ≠ operação.</strong> Números deste portfólio: prova de lab <strong>v5</strong> e <strong>v7</strong> — não são case de opex pago.</div>
+  </div>
+
+  <header class="hero" id="capa">
+    <div class="wrap">
+      <p class="wordmark">JP Decision Engine · wordmark tipográfico</p>
+      <h1>Motor plugável de rota intramuros para WMS e frota AMR</h1>
+      <p class="tagline">Entra no sistema que você já opera, lê o layout estável e devolve a próxima rota — sem trocar o WMS nem a frota.</p>
+      <p class="phrase">O mapa quase não muda. A consulta se repete. A rota continua ótima. O planner para de começar do zero.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="mailto:joaopedro.passos@mail.uft.edu.br?subject=Diagnóstico%20de%202%20semanas%20—%20JP%20Decision%20Engine">Quero o diagnóstico de duas semanas no mapa de vocês</a>
+        <a class="btn btn-ghost" href="mailto:joaopedro.passos@mail.uft.edu.br?subject=30%20minutos%20—%20JP%20Decision%20Engine">30 minutos para ver se faz sentido</a>
+      </div>
+      <p class="meta">João Pedro Pereira Passos · Palmas/TO · contato por e-mail (sem site público neste pacote)</p>
+    </div>
+  </header>
+
+  <main>
+    <section id="problema">
+      <div class="wrap">
+        <h2>Problema</h2>
+        <p>No corredor do CD, a rota intramuros ainda vive no papel, no Excel ou na cabeça de quem conhece o layout.</p>
+        <div class="grid-2" style="margin-top:1rem">
+          <div class="card">
+            <h3>Product manager de WMS</h3>
+            <ul>
+              <li>Módulo de roteamento frágil</li>
+              <li>Integração cara a cada onda</li>
+              <li>Retrabalho no planner</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>CEO / liderança de frota AMR</h3>
+            <ul>
+              <li>Frota ociosa na curva</li>
+              <li>Operador improvisando o próximo passo</li>
+              <li>Confiança baixa na decisão automática</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top:1.25rem">Quando o volume sobe, a fila trava; o AMR espera; o planner recomeça do zero <strong>no mesmo mapa</strong> que quase não mudou.</p>
+        <p>O problema não é “falta de sistema”. O problema é <strong>recomputar do zero uma decisão que o layout estável já permitiria reaproveitar</strong> — com otimalidade e previsibilidade.</p>
+      </div>
+    </section>
+
+    <section id="solucao">
+      <div class="wrap">
+        <h2>Solução em três blocos</h2>
+        <p class="lead">O JP Decision Engine é um motor de decisão de rota intramuros — não é WMS e não é robô.</p>
+        <div class="grid-3" style="margin-top:1rem">
+          <article class="card">
+            <h3>Offline</h3>
+            <p>Prova no mapa estático: layout estável, consultas em bancada, comparação com A* de heurística fixa, relatório de nós / tempo / otimalidade.</p>
+            <p class="who">Para: PM de WMS e time de AMR validando planner.</p>
+          </article>
+          <article class="card">
+            <h3>Online</h3>
+            <p>Decisão na onda ou na missão: o mapa permanece; a rota volta sem forçar o planner a recomeçar do zero a cada pedido.</p>
+            <p class="who">Para: layout estável, ondas repetidas, corredores conhecidos.</p>
+          </article>
+          <article class="card">
+            <h3>API</h3>
+            <p>Encaixe sem trocar o stack.</p>
+            <p><span class="mono">PUT /layout</span> — publica o mapa<br>
+               <span class="mono">POST /plan</span> — pede a rota / plano</p>
+            <p class="who">Não substitui inventário, WCS, telemetria do robô nem roteirização de rua.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="prova">
+      <div class="wrap">
+        <h2>Prova — laboratório <span class="seal">v5</span> <span class="seal">v7</span></h2>
+        <p>Fonte: provas JP-Geo, versões <strong>v5</strong> e <strong>v7</strong> (alinhadas ao pacote de divulgação 2026-09-22). Baseline: A* com heurística fixa. Leitura correta: métricas de <strong>busca</strong> (tempo relativo, nós, otimalidade).</p>
+
+        <div class="warn" role="note">
+          <strong>Aviso obrigatório.</strong> <strong>Números de nós e milissegundos não são economia de metros nem de turno.</strong> Ganho de busca em laboratório não implica, por si, menos metros andados, menos opex, menos horas de mão de obra ou ROI de turno. Extrapolação operacional exige medição no mapa e no fluxo do cliente (diagnóstico / piloto).
+        </div>
+
+        <p class="table-note" id="prova-table-note">Deslize horizontalmente para ver a tabela completa.</p>
+        <div class="table-scroll" role="region" aria-label="Tabela de provas v5 e v7" tabindex="0">
+        <table aria-describedby="prova-table-note">
+          <thead>
+            <tr>
+              <th>Versão</th>
+              <th>Condição</th>
+              <th>Métrica</th>
+              <th>Resultado (lab)</th>
+              <th>O que não afirma</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="seal">Lab v5</span></td>
+              <td>1.000 consultas</td>
+              <td>Tempo vs A* fixo</td>
+              <td>JP-Geo cerca de <strong>28% mais rápido</strong> (v5)</td>
+              <td>Economia de metros ou de turno</td>
+            </tr>
+            <tr>
+              <td><span class="seal">Lab v5</span></td>
+              <td>1.000 consultas</td>
+              <td>Nós vs A* fixo</td>
+              <td>cerca de <strong>31% menos nós</strong> (v5)</td>
+              <td>Menos opex pago em CD real</td>
+            </tr>
+            <tr>
+              <td><span class="seal">Lab v5</span></td>
+              <td>1.000 consultas</td>
+              <td>Otimalidade</td>
+              <td><strong>100%</strong> de otimalidade (v5)</td>
+              <td>Garantia de SLA operacional</td>
+            </tr>
+            <tr>
+              <td><span class="seal">Lab v7</span></td>
+              <td>Decepção geométrica alta</td>
+              <td>Nós vs A*</td>
+              <td>Geo cortou até cerca de <strong>73% dos nós</strong> (v7)</td>
+              <td>Case de opex pago / ROI contratado</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+
+        <ol class="compact">
+          <li>Dizer em voz alta como prova de laboratório.</li>
+          <li>Separar da conversa de preço e de piloto.</li>
+          <li>No diagnóstico de duas semanas, repetir a medição no mapa deles.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="nao-e">
+      <div class="wrap">
+        <h2>O que não é</h2>
+        <div class="chips">
+          <div class="card chip"><h3>Não é WMS</h3><p>Não gerencia inventário, onda, packing nem billing. Encaixa-se no WMS.</p></div>
+          <div class="card chip"><h3>Não é AMR / frota</h3><p>Não é hardware, firmware nem fleet manager. Entrega decisão de rota.</p></div>
+          <div class="card chip"><h3>Não é roteirizador de rua</h3><p>Domínio intramuros: corredor, picking, layout de CD.</p></div>
+          <div class="card chip"><h3>TDA fora do núcleo comercial</h3><p>Não é diferencial de venda deste portfólio. Não entra em pitch, pricing nem CTA.</p></div>
+        </div>
+        <p style="margin-top:1rem;color:var(--muted)">Também não vendemos aqui: garantia de opex, case de opex pago, patente como argumento comercial, paper como prova de chão.</p>
+      </div>
+    </section>
+
+    <section id="ofertas">
+      <div class="wrap">
+        <h2>Ofertas e próximo passo</h2>
+        <div class="grid-3" style="margin-top:1rem">
+          <article class="card">
+            <h3>Diagnóstico</h3>
+            <p>2 semanas</p>
+            <p class="price">R$ 8 mil – R$ 15 mil</p>
+            <p>Mapa de vocês no motor; leitura honesta lab × operação; go/no-go para piloto.</p>
+          </article>
+          <article class="card">
+            <h3>Piloto</h3>
+            <p>90 dias</p>
+            <p class="price">R$ 25 mil – R$ 60 mil</p>
+            <p><span class="mono">PUT /layout</span> + <span class="mono">POST /plan</span> no ambiente acordado; métricas combinadas; decisão de licença.</p>
+          </article>
+          <article class="card">
+            <h3>Licença por site</h3>
+            <p>Mensal</p>
+            <p class="price">R$ 3 mil – R$ 12 mil / mês / site</p>
+            <p>Uso contínuo do motor no site licenciado, após piloto aprovado.</p>
+          </article>
+        </div>
+        <div class="cta-row" style="margin-top:1.5rem">
+          <a class="btn btn-primary" style="color:#141C2B" href="mailto:joaopedro.passos@mail.uft.edu.br?subject=Diagnóstico%20de%202%20semanas%20—%20JP%20Decision%20Engine">Quero o diagnóstico de duas semanas no mapa de vocês</a>
+          <a class="btn" style="border:2px solid var(--panel);color:var(--panel);text-decoration:none;font-weight:650;padding:0.75rem 1.2rem;border-radius:6px" href="mailto:joaopedro.passos@mail.uft.edu.br?subject=30%20minutos%20—%20JP%20Decision%20Engine">Ou 30 minutos</a>
+        </div>
+        <p class="who">CTA sem URL de site — contato: <a href="mailto:joaopedro.passos@mail.uft.edu.br">joaopedro.passos@mail.uft.edu.br</a> · Palmas/TO</p>
+      </div>
+    </section>
+
+    <section id="bio">
+      <div class="wrap">
+        <h2>Mini bio</h2>
+        <div class="card">
+          <p><strong>João Pedro Pereira Passos</strong> constrói o JP Decision Engine em Palmas/TO: motor de rota intramuros pensado para encaixar em WMS e frota AMR sem trocar o stack do cliente.</p>
+          <p>Atua também na formação acadêmica (UFT / Rede BIONORTE; docência em Palmas/TO). A credencial comercial que importa aqui é provar em laboratório (v5–v7) e medir no mapa do comprador — sem cargo de C-level inventado, sem CNPJ decorativo, sem marca registrada.</p>
+          <p class="who">ORCID (referência acadêmica): 0000-0001-7181-4587</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="cenario">
+      <div class="wrap">
+        <div class="synthetic">
+          <div class="label">CENARIO SINTETICO — não é cliente · não é case · não é opex pago</div>
+          <h2 style="margin-top:0.25rem">CD regional com layout estável e frota AMR em rampa</h2>
+          <ul>
+            <li><strong>Persona A:</strong> PM de WMS que precisa modular rota intramuros sem reescrever o core.</li>
+            <li><strong>Persona B:</strong> CEO de AMR que perde ciclo com planner recomeçando do zero no mesmo mapa.</li>
+            <li><strong>Situação:</strong> corredores fixos, ondas repetidas, mapa que muda pouco entre turnos.</li>
+            <li><strong>Uso do motor:</strong> <span class="mono">PUT /layout</span> no mapa sintético; <span class="mono">POST /plan</span> por missão; comparação com A* fixo no mesmo mapa sintético.</li>
+            <li><strong>Leitura permitida:</strong> se números de lab (v5/v7) se repetirem naquele mapa, abre-se conversa de diagnóstico — ainda sem afirmar metros ou turno.</li>
+            <li><strong>Leitura proibida:</strong> transformar isto em “cliente X economizou Y%”.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p><strong style="color:#fff">JP Decision Engine</strong> · portfólio técnico-comercial · 2026-09-22</p>
+      <p>Fonte master: <span class="mono" style="background:transparent;color:#C5CCD8">02_portfolio/2026-09-22_portfolio_JP.md</span></p>
+      <p>Contato: <a href="mailto:joaopedro.passos@mail.uft.edu.br">joaopedro.passos@mail.uft.edu.br</a> · Palmas/TO</p>
+      <p class="note">Sem logo oficial, CNPJ, marca registrada ou domínio público neste pacote. Laboratório ≠ operação. Embargo: este HTML não habilita algoritmo nem material de patente.</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<title>JP Decision Engine — Portfólio técnico-comercial · 2026-09-22</title>
+</head>
+<body>
+<h1>JP Decision Engine</h1>
+<p><strong>Portfólio técnico-comercial · uma página / PDF</strong><br />
+<strong>Data do documento:</strong> 2026-09-22<br />
+<strong>Produto:</strong> motor plugável de rota intramuros<br />
+<strong>Dono técnico:</strong> João Pedro Pereira Passos — Palmas/TO<br />
+<strong>Público:</strong> product manager de WMS · CEO / liderança de frota AMR  </p>
+<blockquote>
+<p><strong>Laboratório ≠ operação.</strong> Os números deste documento vêm de provas de laboratório (v5 e v7). Não são case de opex pago, não garantem economia de metros nem de turno, e não substituem medição no mapa do cliente.</p>
+</blockquote>
+<hr />
+<h2>1. Capa e uma frase</h2>
+<h3>JP Decision Engine</h3>
+<p>Motor plugável de rota intramuros para WMS e frota AMR.</p>
+<p><strong>Uma frase</strong></p>
+<p>O mapa quase não muda. A consulta se repete. A rota continua ótima. O planner para de começar do zero.</p>
+<p><strong>Subtítulo de capa (opcional, uma linha)</strong></p>
+<p>Entra no sistema que você já opera, lê o layout estável e devolve a próxima rota — sem trocar o WMS nem a frota.</p>
+<p><strong>Marcadores de capa (texto puro; sem logo inventado)</strong></p>
+<ul>
+<li>Nome do produto: JP Decision Engine  </li>
+<li>Posição: rota intramuros · plugável  </li>
+<li>Escopo: laboratório v5–v7 documentado · operação sob diagnóstico/piloto  </li>
+<li>Contato: João Pedro Pereira Passos · Palmas/TO · <code>joaopedro.passos@mail.uft.edu.br</code>  </li>
+</ul>
+<p><em>Não há neste documento: logo oficial, CNPJ, marca registrada, domínio público no ar nem URL comercial ativa.</em></p>
+<hr />
+<h2>2. Problema</h2>
+<p>No corredor do CD, a rota intramuros ainda vive no papel, no Excel ou na cabeça de quem conhece o layout.</p>
+<p>Quando o volume sobe:</p>
+<ul>
+<li>a fila trava no chão;</li>
+<li>o AMR espera a próxima decisão;</li>
+<li>o operador improvisa o próximo passo;</li>
+<li>o planner recomeça do zero <strong>no mesmo mapa</strong> que quase não mudou.</li>
+</ul>
+<p>Para o product manager de WMS, isso aparece como módulo de roteamento frágil, integração cara e retrabalho a cada onda. Para o CEO de AMR, aparece como frota ociosa, fila na curva e confiança baixa na decisão automática.</p>
+<p>O problema não é “falta de sistema”. O problema é <strong>recomputar do zero uma decisão que o layout estável já permitiria reaproveitar</strong> — com otimalidade e previsibilidade.</p>
+<hr />
+<h2>3. Solução em três blocos</h2>
+<p>O JP Decision Engine é um <strong>motor de decisão de rota intramuros</strong>, não um WMS e não um robô. Ele se encaixa em três modos de uso.</p>
+<h3>3.1 Offline — prova no mapa estático</h3>
+<ul>
+<li>Recebe um layout estável (planta / grafo / mapa que o time já usa).</li>
+<li>Roda consultas de rota em bancada (laboratório ou sandbox do integrador).</li>
+<li>Compara planner de referência (ex.: A* com heurística fixa) com o motor JP-Geo.</li>
+<li>Entrega relatório de nós expandido, tempo de consulta e otimalidade — <strong>sempre rotulado como laboratório</strong> quando a fonte for v5/v7.</li>
+</ul>
+<p><strong>Para quem:</strong> PM de WMS validando módulo; time de AMR validando planner antes de plug na frota.</p>
+<h3>3.2 Online — decisão na onda / na missão</h3>
+<ul>
+<li>O mapa permanece o mesmo entre consultas repetidas.</li>
+<li>O motor devolve a próxima rota sem forçar o planner a recomeçar do zero a cada pedido.</li>
+<li>Opera ao lado do WMS ou do orquestrador de frota: quem manda no inventário e no robô continua sendo o sistema do cliente.</li>
+</ul>
+<p><strong>Para quem:</strong> operação com layout estável, ondas repetidas, corredores conhecidos.</p>
+<h3>3.3 API — encaixe sem trocar o stack</h3>
+<p>Dois endpoints de contrato (núcleo comercial):</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Recurso</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PUT</code></td>
+<td><code>/layout</code></td>
+<td>Publica / atualiza o mapa intramuros que o motor deve conhecer</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/plan</code></td>
+<td>Solicita a rota / plano a partir de origem, destino e restrições do turno</td>
+</tr>
+</tbody>
+</table>
+<p>Fluxo típico: o integrador envia o layout uma vez (ou quando o mapa muda de verdade) via <code>PUT /layout</code>; a cada missão ou picking path, chama <code>POST /plan</code> e consome a resposta no WMS ou no fleet manager.</p>
+<p><strong>O que a API não é:</strong> substituto de inventário, de WCS, de telemetria do robô ou de roteirização de rua.</p>
+<hr />
+<div class="page-break"></div><h2>4. Prova — tabela honesta (laboratório v5 e v7)</h2>
+<p><strong>Fonte:</strong> provas de laboratório JP-Geo, versões <strong>v5</strong> e <strong>v7</strong> (números alinhados ao pacote de divulgação 2026-09-22).<br />
+<strong>Baseline:</strong> A* com heurística fixa.<br />
+<strong>Leitura correta:</strong> métricas de <strong>busca</strong> (tempo relativo, nós, otimalidade).  </p>
+<div class="prova-keep"><h3>Aviso obrigatório</h3>
+<blockquote>
+<p><strong>Números de nós e milissegundos não são economia de metros nem de turno.</strong><br />
+Redução de nós ou ganho de tempo de consulta em laboratório <strong>não</strong> implica, por si, menos metros andados, menos opex, menos horas de mão de obra ou ROI de turno. Qualquer extrapolação operacional exige medição no mapa e no fluxo do cliente (diagnóstico / piloto).</p>
+</blockquote>
+<h3>Tabela — o que a prova diz (e só o que ela diz)</h3>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Condição</th>
+<th>Métrica</th>
+<th>Resultado (lab)</th>
+<th>O que <strong>não</strong> afirma</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>v5</strong></td>
+<td>1.000 consultas</td>
+<td>Tempo vs A* fixo</td>
+<td>JP-Geo cerca de <strong>28% mais rápido</strong> (v5)</td>
+<td>Economia de metros ou de turno</td>
+</tr>
+<tr>
+<td><strong>v5</strong></td>
+<td>1.000 consultas</td>
+<td>Nós expandidos vs A* fixo</td>
+<td>cerca de <strong>31% menos nós</strong> (v5)</td>
+<td>Menos opex pago em CD real</td>
+</tr>
+<tr>
+<td><strong>v5</strong></td>
+<td>1.000 consultas</td>
+<td>Otimalidade</td>
+<td><strong>100%</strong> de otimalidade (v5)</td>
+<td>Garantia de SLA operacional</td>
+</tr>
+<tr>
+<td><strong>v7</strong></td>
+<td>Decepção geométrica alta</td>
+<td>Nós vs A*</td>
+<td>Geo cortou até cerca de <strong>73% dos nós</strong> (v7)</td>
+<td>Case de opex pago / ROI contratado</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Como usar esta tabela com comprador técnico</h3>
+<ol>
+<li>Dizê-la em voz alta como <strong>prova de laboratório</strong>.  </li>
+<li>Separar da conversa de preço e de piloto.  </li>
+<li>No diagnóstico de duas semanas, repetir a medição <strong>no mapa deles</strong> — aí sim fala-se de operação.</li>
+</ol>
+<hr />
+<h2>5. O que não é</h2>
+<p>Checklist curto para PM de WMS e CEO de AMR:</p>
+<table>
+<thead>
+<tr>
+<th>Não é</th>
+<th>Por quê</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WMS</strong></td>
+<td>Não gerencia inventário, onda, packing nem billing. Encaixa-se <em>no</em> WMS.</td>
+</tr>
+<tr>
+<td><strong>AMR / frota</strong></td>
+<td>Não é hardware, firmware nem fleet manager. Entrega decisão de rota para quem já opera a frota.</td>
+</tr>
+<tr>
+<td><strong>Roteirizador de rua</strong></td>
+<td>Domínio é <strong>intramuros</strong> (corredor, picking, layout de CD), não malha urbana nem última milha.</td>
+</tr>
+<tr>
+<td><strong>TDA (e adjacências de pesquisa pura)</strong></td>
+<td>Fora do <strong>núcleo comercial</strong>. Não é diferencial de venda deste portfólio; não entra em pitch, pricing nem CTA.</td>
+</tr>
+</tbody>
+</table>
+<p>Também <strong>não</strong> vendemos neste documento: garantia de opex, case de opex pago, patente como argumento comercial, paper como prova de chão, nem “ficar rico com automação”.</p>
+<hr />
+<h2>6. Ofertas e próximo passo</h2>
+<p>Três ofertas comerciais claras. Preços em faixa (BRL). Escopo fino no kickoff.</p>
+<table>
+<thead>
+<tr>
+<th>Oferta</th>
+<th>Duração</th>
+<th>Faixa</th>
+<th>O que entrega</th>
+<th>Próximo passo típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Diagnóstico</strong></td>
+<td>2 semanas</td>
+<td>R$ 8 mil – R$ 15 mil</td>
+<td>Mapa de vocês no motor; leitura honesta lab × operação; go/no-go para piloto</td>
+<td>Kickoff com layout + 1–2 fluxos críticos</td>
+</tr>
+<tr>
+<td><strong>Piloto</strong></td>
+<td>90 dias</td>
+<td>R$ 25 mil – R$ 60 mil</td>
+<td><code>PUT /layout</code> + <code>POST /plan</code> no ambiente acordado; métricas combinadas; decisão de licença</td>
+<td>Contrato de piloto com critérios de sucesso</td>
+</tr>
+<tr>
+<td><strong>Licença por site</strong></td>
+<td>mensal</td>
+<td>R$ 3 mil – R$ 12 mil / mês / site</td>
+<td>Uso contínuo do motor no site licenciado</td>
+<td>Após piloto aprovado</td>
+</tr>
+</tbody>
+</table>
+<h3>CTA único (alinhar a site, PDF e conversa)</h3>
+<p><strong>Quero o diagnóstico de duas semanas no mapa de vocês.</strong><br />
+Alternativa leve: <strong>30 minutos</strong> para ver se faz sentido.</p>
+<p>Contato comercial/técnico do fundador: <code>joaopedro.passos@mail.uft.edu.br</code> · Palmas/TO.</p>
+<hr />
+<h2>7. Mini bio (sem inflar títulos)</h2>
+<p><strong>João Pedro Pereira Passos</strong> constrói o JP Decision Engine em Palmas/TO: motor de rota intramuros pensado para encaixar em WMS e frota AMR sem trocar o stack do cliente.</p>
+<p>Atua também na formação acadêmica (UFT / Rede BIONORTE; docência em Palmas/TO). Neste portfólio comercial, a credencial que importa é <strong>capacidade de provar em laboratório (v5–v7) e de medir no mapa do comprador</strong> — não cargo de C-level inventado, não CNPJ decorativo, não marca registrada.</p>
+<p>ORCID (referência acadêmica, se o leitor quiser): <code>0000-0001-7181-4587</code>.</p>
+<hr />
+<section class="cenario"><h2>8. CENARIO SINTETICO</h2>
+<blockquote>
+<p><strong>Rótulo obrigatório:</strong> isto é um <strong>CENARIO SINTETICO</strong>.<br />
+<strong>Não é cliente.</strong> Não é case. Não é opex pago. Não use como prova de operação.</p>
+</blockquote>
+<p><strong>CENARIO SINTETICO — CD regional com layout estável e frota AMR em rampa</strong></p>
+<ul>
+<li><strong>Persona A:</strong> product manager de WMS que precisa modular rota intramuros sem reescrever o core.  </li>
+<li><strong>Persona B:</strong> CEO de empresa de AMR que perde ciclo com planner recomeçando do zero no mesmo mapa.  </li>
+<li><strong>Situação:</strong> corredores fixos, ondas repetidas, mapa que muda pouco entre turnos.  </li>
+<li><strong>Dor:</strong> fila na curva; operador improvisando; integração “custom” a cada fornecedor.  </li>
+<li><strong>Uso do motor:</strong> <code>PUT /layout</code> no mapa sintético; <code>POST /plan</code> por missão; comparação interna com A* fixo <strong>no mesmo mapa sintético</strong>.  </li>
+<li><strong>Leitura permitida:</strong> se os números de lab (v5/v7) se repetirem <em>naquele</em> mapa, abre-se conversa de diagnóstico real — ainda sem afirmar metros ou turno.  </li>
+<li><strong>Leitura proibida:</strong> transformar este parágrafo em “cliente X economizou Y%”.</li>
+</ul>
+<hr />
+</section><h2>9. Especificação visual</h2>
+<p>Para site one-pager e PDF. Sem logo inventado: use <strong>wordmark tipográfico</strong> “JP Decision Engine” até existir marca oficial.</p>
+<h3>9.1 Princípios</h3>
+<ul>
+<li>Tom B2B seco (CD / WMS / AMR), sem estética “startup neon”.  </li>
+<li>Hierarquia: problema → solução → prova lab → o que não é → oferta → CTA.  </li>
+<li>Todo card de número leva o selo <strong>Laboratório (v5)</strong> ou <strong>Laboratório (v7)</strong>.  </li>
+<li>O aviso de nós/ms aparece <strong>junto</strong> da tabela, não no rodapé escondido.</li>
+</ul>
+<h3>9.2 Paleta sugerida (neutra; ajustável)</h3>
+<table>
+<thead>
+<tr>
+<th>Papel</th>
+<th>Hex</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fundo</td>
+<td><code>#F7F4EC</code></td>
+<td>Página / PDF</td>
+</tr>
+<tr>
+<td>Texto</td>
+<td><code>#141C2B</code></td>
+<td>Corpo</td>
+</tr>
+<tr>
+<td>Painel / capa</td>
+<td><code>#1B2A41</code></td>
+<td>Faixa de capa</td>
+</tr>
+<tr>
+<td>Acento</td>
+<td><code>#C8A024</code></td>
+<td>CTA e selos “Laboratório”</td>
+</tr>
+<tr>
+<td>Branco card</td>
+<td><code>#FFFFFF</code></td>
+<td>Blocos de oferta e tabela</td>
+</tr>
+</tbody>
+</table>
+<p><em>Paleta de referência tipográfica/institucional já usada em materiais do autor; não constitui identidade oficial do produto.</em></p>
+<h3>9.3 Tipografia</h3>
+<ul>
+<li>Títulos: sans geométrica legível (ex.: Inter / Source Sans) · peso 600–700.  </li>
+<li>Corpo: 16–18 px web / 11–12 pt PDF.  </li>
+<li>Código / endpoints: mono (<code>PUT /layout</code>, <code>POST /plan</code>).</li>
+</ul>
+<h3>9.4 Layout one-pager (web)</h3>
+<ol>
+<li>Hero: frase + CTA diagnóstico.  </li>
+<li>Problema (2 colunas: WMS | AMR).  </li>
+<li>Três cards: Offline · Online · API.  </li>
+<li>Tabela lab + aviso obrigatório.  </li>
+<li>“O que não é” em quatro chips.  </li>
+<li>Ofertas em três colunas + CTA.  </li>
+<li>Mini bio + CENARIO SINTETICO em box com borda tracejada.  </li>
+<li>Rodapé: e-mail · Palmas/TO · data do doc · <em>sem URL inventada</em>.</li>
+</ol>
+<h3>9.5 Layout PDF (A4)</h3>
+<ul>
+<li>Margens ≥ 1,5 cm.  </li>
+<li>Capa em 1/3 da primeira página; resto em seções numeradas iguais a este Markdown.  </li>
+<li>Quebra de página <strong>antes</strong> da tabela lab, para o aviso não ficar órfão.  </li>
+<li>Marca d’água leve opcional: <code>LABORATÓRIO — NÃO É OPEX</code>.</li>
+</ul>
+<h3>9.6 Assets a <strong>não</strong> inventar</h3>
+<ul>
+<li>Logo vetorial, ícone de app, mock de domínio <code>.com.br</code> no ar, CNPJ, selo “patente”, print de dashboard de cliente real sem autorização.</li>
+</ul>
+<hr />
+<h2>10. Índice de arquivos e README de montagem</h2>
+<h3>10.1 Índice (pacote portfólio)</h3>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Função</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>02_portfolio/2026-09-22_portfolio_JP.md</code></td>
+<td><strong>Este documento</strong> — fonte master (site + PDF)</td>
+</tr>
+<tr>
+<td><code>01_video_promocional/2026-09-22_video_divulgacao.md</code></td>
+<td>Roteiros, legendas, calendário; números lab alinhados</td>
+</tr>
+<tr>
+<td><code>01_video_promocional/2026-09-22_jpde_90s.srt</code></td>
+<td>Legendas do vídeo 90s</td>
+</tr>
+<tr>
+<td><code>02_portfolio/README_montagem.md</code></td>
+<td>Passo a passo de publicação (abaixo, seção 10.2)</td>
+</tr>
+<tr>
+<td><em>(a criar)</em> <code>02_portfolio/assets/</code></td>
+<td>Wordmark, prints de API mock, diagramas — só com material real</td>
+</tr>
+<tr>
+<td><em>(a criar)</em> export PDF / HTML</td>
+<td>Gerados a partir deste Markdown</td>
+</tr>
+</tbody>
+</table>
+<h3>10.2 README de montagem</h3>
+<pre><code class="language-text">README — montagem do portfólio JP Decision Engine
+=================================================
+
+1. Fonte da verdade
+   - Edite apenas 2026-09-22_portfolio_JP.md (ou a data nova).
+   - Números de prova: só os da tabela v5/v7 deste arquivo
+     (alinhados a 01_video_promocional/).
+
+2. Site de uma página
+   - Converter o Markdown para HTML estático (Pandoc, 11ty, ou
+     gerador que você já usa).
+   - Manter a ordem das seções 1→8 no hero→rodapé.
+   - CTA fixo: diagnóstico de 2 semanas / 30 minutos.
+   - Não publicar URL comercial inventada; use domínio real
+     quando existir.
+
+3. PDF
+   - Exportar A4 a partir do mesmo Markdown.
+   - Garantir aviso de nós/ms na mesma página da tabela.
+   - Rodapé: data + “Laboratório ≠ operação”.
+
+4. Checagem pré-publicação
+   [ ] Todo número cita v5 ou v7
+   [ ] TDA não aparece como diferencial de venda
+   [ ] CENARIO SINTETICO rotulado (nunca como cliente)
+   [ ] Sem logo/CNPJ/marca/URL inventados
+   [ ] Lab separado de operação
+   [ ] Aviso: nós/ms ≠ metros ≠ turno
+
+5. Alinhamento com vídeo
+   - Mesma frase de capa, mesmos números, mesmo CTA
+     que 01_video_promocional/2026-09-22_video_divulgacao.md.
+</code></pre>
+<h3>10.3 Verificação deste arquivo</h3>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arquivo em <code>02_portfolio/2026-09-22_portfolio_JP.md</code></td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Capa + uma frase</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Problema</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Solução offline / online / API (<code>PUT /layout</code>, <code>POST /plan</code>)</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Tabela honesta v5 e v7; todo número cita v5 ou v7</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>O que não é: WMS, AMR, roteirizador de rua, TDA</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>TDA <strong>fora</strong> do diferencial de venda</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Ofertas (diagnóstico / piloto / licença) + próximo passo</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Mini bio sem títulos inflados</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>CENARIO SINTETICO rotulado; nunca como cliente</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Especificação visual</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Índice + README de montagem</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Sem logo, CNPJ, marca registrada, URL no ar inventados</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Laboratório ≠ operação</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>Aviso: nós e ms ≠ metros ≠ turno</td>
+<td>OK</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Fim do portfólio master · 2026-09-22 · João Pedro Pereira Passos · JP Decision Engine</em></p>
+</body>
+</html>

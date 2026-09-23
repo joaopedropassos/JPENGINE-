@@ -1,0 +1,42 @@
+1
+00:00:00,000 --> 00:00:08,000
+No corredor do CD, a rota ainda vive no papel,
+no Excel ou na cabeça de quem conhece o layout.
+
+2
+00:00:08,000 --> 00:00:16,000
+Quando o volume sobe, a fila trava.
+O AMR espera. O operador improvisa o próximo passo.
+
+3
+00:00:16,000 --> 00:00:28,000
+O JP Decision Engine é um motor plugável de rota intramuros.
+Ele entra no WMS ou na frota, lê o mapa que você já usa
+e devolve a próxima rota sem trocar o sistema.
+
+4
+00:00:28,000 --> 00:00:42,000
+O mapa quase não muda. A consulta se repete.
+A rota continua ótima. O planner para de começar do zero.
+
+5
+00:00:42,000 --> 00:00:52,000
+Em laboratório, na v5, em mil consultas,
+o JP-Geo ficou cerca de 28% mais rápido
+e 31% com menos nós que A* fixo, com 100% de otimalidade.
+
+6
+00:00:52,000 --> 00:01:02,000
+Na v7, em decepção geométrica alta,
+o Geo cortou até cerca de 73% dos nós frente ao A*.
+Isso é prova de laboratório, não case de opex pago.
+
+7
+00:01:02,000 --> 00:01:12,000
+Para Delage, Automni, AGVS, 3PL e CD com layout estável:
+mesma lógica. Menos retrabalho na decisão. Mais fluxo no chão.
+
+8
+00:01:12,000 --> 00:01:25,000
+Quero o diagnóstico de duas semanas no mapa de vocês.
+Ou 30 minutos para ver se faz sentido.
